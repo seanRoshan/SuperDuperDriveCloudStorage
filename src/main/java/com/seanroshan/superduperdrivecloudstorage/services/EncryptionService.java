@@ -13,7 +13,7 @@ import java.util.Base64;
 
 @Service
 public class EncryptionService {
-    private final Logger logger = LoggerFactory.getLogger(EncryptionService.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(EncryptionService.class);
 
     public String encryptValue(String data, String key) {
         byte[] encryptedValue = null;
@@ -25,7 +25,7 @@ public class EncryptionService {
             encryptedValue = cipher.doFinal(data.getBytes(StandardCharsets.UTF_8));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException
                 | IllegalBlockSizeException | BadPaddingException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
 
         return Base64.getEncoder().encodeToString(encryptedValue);
@@ -41,7 +41,7 @@ public class EncryptionService {
             decryptedValue = cipher.doFinal(Base64.getDecoder().decode(data));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException
                 | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
 
         assert decryptedValue != null;
