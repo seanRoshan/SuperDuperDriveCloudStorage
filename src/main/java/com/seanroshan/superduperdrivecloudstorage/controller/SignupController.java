@@ -1,5 +1,6 @@
 package com.seanroshan.superduperdrivecloudstorage.controller;
 
+import com.seanroshan.superduperdrivecloudstorage.backend.constants.ApplicationConstants;
 import com.seanroshan.superduperdrivecloudstorage.backend.constants.BusinessError;
 import com.seanroshan.superduperdrivecloudstorage.model.User;
 import com.seanroshan.superduperdrivecloudstorage.services.UserService;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("signup")
+@RequestMapping(ApplicationConstants.SIGN_UP_NAME)
 public class SignupController {
 
     private final UserService userService;
@@ -21,27 +22,27 @@ public class SignupController {
 
     @GetMapping
     public String getSignUpPage(User user, Model model) {
-        model.addAttribute("status", "idle");
-        return "signup";
+        model.addAttribute(ApplicationConstants.STATUS_ATTRIBUTE, ApplicationConstants.IDLE_STATUS);
+        return ApplicationConstants.SIGN_UP_NAME;
     }
 
     @PostMapping
     public String registerNewUser(User user, Model model) {
         BusinessError businessError = this.userService.verifyUser(user);
         if (businessError != null) {
-            model.addAttribute("status", "FAILED");
-            model.addAttribute("errorMessage", businessError.getErrorMessage());
-            return "signup";
+            model.addAttribute(ApplicationConstants.STATUS_ATTRIBUTE, ApplicationConstants.FAILURE_STATUS);
+            model.addAttribute(ApplicationConstants.ERROR_MESSAGE_ATTRIBUTE, businessError.getErrorMessage());
+            return ApplicationConstants.SIGN_UP_NAME;
         }
 
         boolean isRegistered = this.userService.registerUser(user);
         if (isRegistered) {
-            model.addAttribute("status", "SUCCESS");
+            model.addAttribute(ApplicationConstants.STATUS_ATTRIBUTE, ApplicationConstants.SUCCESS_STATUS);
         } else {
-            model.addAttribute("status", "FAILED");
-            model.addAttribute("errorMessage", "Registration failed!, please try again later!");
+            model.addAttribute(ApplicationConstants.STATUS_ATTRIBUTE, ApplicationConstants.FAILURE_STATUS);
+            model.addAttribute(ApplicationConstants.ERROR_MESSAGE_ATTRIBUTE, BusinessError.REQUIRED_FIELDS.getErrorMessage());
         }
-        return "signup";
+        return ApplicationConstants.SIGN_UP_NAME;
     }
 
 }
