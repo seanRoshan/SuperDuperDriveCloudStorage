@@ -1,5 +1,6 @@
 package com.seanroshan.superduperdrivecloudstorage;
 
+import com.seanroshan.superduperdrivecloudstorage.model.Credential;
 import com.seanroshan.superduperdrivecloudstorage.model.Note;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
@@ -23,6 +24,7 @@ public class SuperDuperDriveCloudStorageApplicationSeleniumTest {
     private SignupPage signupPage;
     private HomePage homePage;
     private NotePage notePage;
+    private CredentialPage credentialPage;
     private ResultPage resultPage;
 
     private final String userName = "Admin";
@@ -30,6 +32,10 @@ public class SuperDuperDriveCloudStorageApplicationSeleniumTest {
 
     private Note note1;
     private Note note2;
+
+    private Credential credential1;
+    private Credential credential2;
+
 
     @BeforeAll
     public static void beforeAll() {
@@ -48,6 +54,7 @@ public class SuperDuperDriveCloudStorageApplicationSeleniumTest {
         signupPage = new SignupPage(driver);
         homePage = new HomePage(driver);
         notePage = new NotePage(driver);
+        credentialPage = new CredentialPage(driver);
         resultPage = new ResultPage(driver);
         note1 = new Note();
         note1.setNoteTitle("NOTE TITLE");
@@ -55,6 +62,14 @@ public class SuperDuperDriveCloudStorageApplicationSeleniumTest {
         note2 = new Note();
         note2.setNoteTitle("EDIT NOTE TITLE");
         note2.setNoteDescription("EDIT NOTE DESCRIPTION");
+        credential1 = new Credential();
+        credential1.setUrl("https://www.google.com");
+        credential1.setUserName("Admin");
+        credential1.setUnEncryptedPassword("Test_Pass_2020");
+        credential2 = new Credential();
+        credential2.setUrl("https://www.apple.com");
+        credential2.setUserName("Admin2");
+        credential2.setUnEncryptedPassword("Apple_Pass_2020");
     }
 
     @Test
@@ -128,6 +143,7 @@ public class SuperDuperDriveCloudStorageApplicationSeleniumTest {
         Note edited = notePage.getNote();
         assertEquals(edited.getNoteTitle(), note2.getNoteTitle());
         assertEquals(edited.getNoteDescription(), note2.getNoteDescription());
+        homePage.logout();
         Thread.sleep(1000);
     }
 
@@ -142,6 +158,56 @@ public class SuperDuperDriveCloudStorageApplicationSeleniumTest {
         notePage.navigateToNoteTab();
         String noNoteText = notePage.getNoNoteText();
         assertTrue(noNoteText.contains("YOU DO NOT HAVE ANY NOTE"));
+        homePage.logout();
+        Thread.sleep(1000);
+    }
+
+    @Test
+    @Order(9)
+    public void testAddCredential() throws InterruptedException {
+        driver.get("http://localhost:" + port + "/login");
+        loginPage.login(userName, password);
+        credentialPage.navigateToCredentialTab();
+        credentialPage.addNewCredential(credential1);
+        resultPage.clickOnContinueButton();
+        credentialPage.navigateToCredentialTab();
+        Credential added = credentialPage.getCredential();
+        assertEquals(added.getUrl(), credential1.getUrl());
+        assertEquals(added.getUserName(), credential1.getUserName());
+        assertEquals(added.getPassword(), credential1.getUnEncryptedPassword());
+        homePage.logout();
+        Thread.sleep(1000);
+    }
+
+    @Test
+    @Order(10)
+    public void testEditCredential() throws InterruptedException {
+        driver.get("http://localhost:" + port + "/login");
+        loginPage.login(userName, password);
+        credentialPage.navigateToCredentialTab();
+        credentialPage.editCredential(credential2);
+        resultPage.clickOnContinueButton();
+        credentialPage.navigateToCredentialTab();
+        Credential edited = credentialPage.getCredential();
+        assertEquals(edited.getUrl(), credential2.getUrl());
+        assertEquals(edited.getUserName(), credential2.getUserName());
+        assertEquals(edited.getPassword(), credential2.getUnEncryptedPassword());
+        homePage.logout();
+        Thread.sleep(1000);
+    }
+
+    @Test
+    @Order(11)
+    public void testDeleteCredential() throws InterruptedException {
+        driver.get("http://localhost:" + port + "/login");
+        loginPage.login(userName, password);
+        credentialPage.navigateToCredentialTab();
+        credentialPage.deleteCredential();
+        resultPage.clickOnContinueButton();
+        credentialPage.navigateToCredentialTab();
+        String noCredentialText = credentialPage.getNoCredentialText();
+        assertTrue(noCredentialText.contains("YOU DO NOT HAVE ANY CREDENTIAL"));
+        homePage.logout();
         Thread.sleep(1000);
     }
 
