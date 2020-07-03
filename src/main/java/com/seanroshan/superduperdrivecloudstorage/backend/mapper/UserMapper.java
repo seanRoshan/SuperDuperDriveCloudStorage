@@ -1,6 +1,6 @@
 package com.seanroshan.superduperdrivecloudstorage.backend.mapper;
 
-import com.seanroshan.superduperdrivecloudstorage.backend.constants.MapperParameterConstants;
+import com.seanroshan.superduperdrivecloudstorage.backend.constants.ParameterConstants;
 import com.seanroshan.superduperdrivecloudstorage.model.User;
 import org.apache.ibatis.annotations.*;
 
@@ -21,7 +21,7 @@ public interface UserMapper {
      * @return {@link User}
      */
     @Select("SELECT * FROM USERS WHERE USER_ID = #{userId}")
-    User getUserByUserId(@Param(MapperParameterConstants.USER_ID) int userId);
+    User getUserByUserId(@Param(ParameterConstants.USER_ID) int userId);
 
     /**
      * Is User Exists
@@ -32,7 +32,7 @@ public interface UserMapper {
     @Select("SELECT EXISTS ( "
             + " SELECT USER_ID FROM USERS WHERE USER_NAME = #{userName} "
             + " )")
-    boolean isUserExists(@Param(MapperParameterConstants.USER_NAME) String userName);
+    boolean isUserExists(@Param(ParameterConstants.USER_NAME) String userName);
 
 
     /**
@@ -42,7 +42,7 @@ public interface UserMapper {
      * @return {@link User}
      */
     @Select("SELECT * FROM USERS WHERE USER_NAME = #{userName}")
-    User getUser(@Param(MapperParameterConstants.USER_NAME) String userName);
+    User getUser(@Param(ParameterConstants.USER_NAME) String userName);
 
 
     /**

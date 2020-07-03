@@ -1,8 +1,9 @@
-package com.seanroshan.superduperdrivecloudstorage.services;
+package com.seanroshan.superduperdrivecloudstorage.services.api;
 
 import com.seanroshan.superduperdrivecloudstorage.backend.constants.BusinessError;
 import com.seanroshan.superduperdrivecloudstorage.backend.dao.UserDAO;
 import com.seanroshan.superduperdrivecloudstorage.model.User;
+import com.seanroshan.superduperdrivecloudstorage.services.utils.HashService;
 import com.seanroshan.superduperdrivecloudstorage.utils.ValidationUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -73,13 +73,13 @@
             </div>
             <div class="tab-pane fade" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
                 <button style="margin: 0.25em;" type="button" class="btn btn-info float-right"
-                        onclick="showNoteModal()">
+                        onclick="showNoteModal(0,'','')">
                     + Add a New Note
                 </button>
 
                 <div class="table-responsive">
                     <table class="table table-striped" id="userTable">
-                        <thead>
+                        <thead th:unless="${notes == null || notes.isEmpty()}">
                         <tr>
                             <th style="width: 20%" scope="col"></th>
                             <th style="width: 20%" scope="col">Title</th>
@@ -87,13 +87,23 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
+                        <tr th:each="note : ${notes}">
                             <td>
-                                <button type="button" class="btn btn-success">Edit</button>
-                                <a class="btn btn-danger">Delete</a>
+                                <button th:note-id="${note.noteId}"
+                                        th:note-title="${note.noteTitle}"
+                                        th:note-description="${note.noteDescription}"
+                                        type="button"
+                                        class="btn btn-success note-edit-button">Edit
+                                </button>
+                                <a th:href="@{/note-management/delete(noteId=${note.noteId})}" class="btn btn-danger">Delete</a>
                             </td>
-                            <th scope="row">Example Note Title</th>
-                            <td>Example Note Description</td>
+                            <th th:text="${note.noteTitle}"></th>
+                            <td th:text="${note.noteDescription}"></td>
+                        </tr>
+                        <tr th:if="${notes == null || notes.isEmpty()}">
+                            <td colspan="2">
+                                YOU DO NOT HAVE ANY NOTE
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -110,16 +120,23 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="#" method="POST">
-                                    <input type="hidden" name="noteId" id="note-id">
+                                <form th:object="${noteToEdit}" action="#" th:action="@{/note-management}"
+                                      method="POST">
+                                    <input th:value="*{noteId}" type="hidden" name="noteId" id="note-id">
                                     <div class="form-group">
                                         <label for="note-title" class="col-form-label">Title</label>
-                                        <input type="text" name="noteTitle" class="form-control" id="note-title"
+                                        <input th:value="*{noteTitle}"
+                                               type="text" name="noteTitle"
+                                               class="form-control"
+                                               id="note-title"
                                                maxlength="20" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="note-description" class="col-form-label">Description</label>
-                                        <textarea class="form-control" name="noteDescription" id="note-description"
+                                        <textarea th:value="*{noteDescription}"
+                                                  class="form-control"
+                                                  name="noteDescription"
+                                                  id="note-description"
                                                   rows="5" maxlength="1000" required></textarea>
                                     </div>
                                     <button id="noteSubmit" type="submit" class="d-none"></button>
@@ -217,10 +234,18 @@
 <!--For opening the note modal-->
 <script type="text/javascript">
     // For opening the note modal
-    function showNoteModal(noteId, noteTitle, noteDescription) {
-        $('#note-id').val(noteId ? noteId : '');
+
+    $('.note-edit-button').on('click', function () {
+        const noteId = this.getAttribute("note-id");
+        const noteTitle = this.getAttribute("note-title")
+        const noteDescription = this.getAttribute("note-description")
+        $('#note-id').val(noteId ? noteId : 0);
         $('#note-title').val(noteTitle ? noteTitle : '');
         $('#note-description').val(noteDescription ? noteDescription : '');
+        this.showNoteModal();
+    });
+
+    function showNoteModal() {
         $('#noteModal').modal('show');
     }
 

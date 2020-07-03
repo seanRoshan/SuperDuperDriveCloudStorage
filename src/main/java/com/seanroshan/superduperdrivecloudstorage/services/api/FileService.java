@@ -1,4 +1,4 @@
-package com.seanroshan.superduperdrivecloudstorage.services;
+package com.seanroshan.superduperdrivecloudstorage.services.api;
 
 import com.seanroshan.superduperdrivecloudstorage.backend.dao.FileDAO;
 import com.seanroshan.superduperdrivecloudstorage.model.File;

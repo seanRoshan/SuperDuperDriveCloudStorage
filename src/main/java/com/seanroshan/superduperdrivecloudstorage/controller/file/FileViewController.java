@@ -1,9 +1,11 @@
 package com.seanroshan.superduperdrivecloudstorage.controller.file;
 
+import com.seanroshan.superduperdrivecloudstorage.backend.constants.ApplicationConstants;
+import com.seanroshan.superduperdrivecloudstorage.backend.constants.BusinessError;
 import com.seanroshan.superduperdrivecloudstorage.model.File;
 import com.seanroshan.superduperdrivecloudstorage.model.User;
-import com.seanroshan.superduperdrivecloudstorage.services.FileService;
-import com.seanroshan.superduperdrivecloudstorage.services.UserService;
+import com.seanroshan.superduperdrivecloudstorage.services.api.FileService;
+import com.seanroshan.superduperdrivecloudstorage.services.api.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.Authentication;
@@ -46,9 +48,9 @@ public class FileViewController {
             FileCopyUtils.copy(inputStream, response.getOutputStream());
             return "result";
         } catch (Exception e) {
-            model.addAttribute("status", "FAILED");
-            model.addAttribute("errorMessage", "Failed to download file");
-            return "result";
+            model.addAttribute(ApplicationConstants.STATUS_ATTRIBUTE, ApplicationConstants.FAILURE_STATUS);
+            model.addAttribute(ApplicationConstants.ERROR_MESSAGE_ATTRIBUTE, BusinessError.DOWNLOAD_FILE_FAILED.getErrorMessage());
+            return ApplicationConstants.RESULT_PAGE_NAME;
         }
 
     }

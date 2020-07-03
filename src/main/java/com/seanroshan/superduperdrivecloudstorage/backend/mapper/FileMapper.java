@@ -1,6 +1,6 @@
 package com.seanroshan.superduperdrivecloudstorage.backend.mapper;
 
-import com.seanroshan.superduperdrivecloudstorage.backend.constants.MapperParameterConstants;
+import com.seanroshan.superduperdrivecloudstorage.backend.constants.ParameterConstants;
 import com.seanroshan.superduperdrivecloudstorage.model.File;
 import org.apache.ibatis.annotations.*;
 
@@ -22,7 +22,7 @@ public interface FileMapper {
      * @return {@link ArrayList<File>}
      */
     @Select("SELECT * FROM FILES WHERE USER_ID = #{userId}")
-    ArrayList<File> getFilesByUserId(@Param(MapperParameterConstants.USER_ID) int userId);
+    ArrayList<File> getFilesByUserId(@Param(ParameterConstants.USER_ID) int userId);
 
 
     /**
@@ -47,8 +47,8 @@ public interface FileMapper {
             + " FILE_ID = #{fileId} "
             + " and USER_ID = #{userId} "
             + " limit 1")
-    File getFile(@Param(MapperParameterConstants.FILE_ID) int fileId,
-                 @Param(MapperParameterConstants.USER_ID) int userId);
+    File getFile(@Param(ParameterConstants.FILE_ID) int fileId,
+                 @Param(ParameterConstants.USER_ID) int userId);
 
 
     /**
@@ -60,7 +60,7 @@ public interface FileMapper {
     @Delete("DELETE FROM FILES WHERE "
             + " FILE_ID = #{fileId} "
             + " and USER_ID = #{userId} ")
-    int deleteFile(@Param(MapperParameterConstants.FILE_ID) int fileId,
-                   @Param(MapperParameterConstants.USER_ID) int userId);
+    int deleteFile(@Param(ParameterConstants.FILE_ID) int fileId,
+                   @Param(ParameterConstants.USER_ID) int userId);
 
 }

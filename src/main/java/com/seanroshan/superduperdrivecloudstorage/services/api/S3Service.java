@@ -1,4 +1,4 @@
-package com.seanroshan.superduperdrivecloudstorage.services;
+package com.seanroshan.superduperdrivecloudstorage.services.api;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

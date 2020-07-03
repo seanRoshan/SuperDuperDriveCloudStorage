@@ -5,10 +5,11 @@ package com.seanroshan.superduperdrivecloudstorage.backend.constants;
  *
  * @author Sean Roshan
  */
-public interface MapperParameterConstants {
+public interface ParameterConstants {
 
     public static final String USER_ID = "userId";
     public static final String USER_NAME = "userName";
     public static final String FILE_ID = "fileId";
+    public static final String NOTE_ID = "noteId";
 
 }

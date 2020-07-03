@@ -1,8 +1,10 @@
 package com.seanroshan.superduperdrivecloudstorage.controller.file;
 
+import com.seanroshan.superduperdrivecloudstorage.backend.constants.ApplicationConstants;
+import com.seanroshan.superduperdrivecloudstorage.backend.constants.BusinessError;
 import com.seanroshan.superduperdrivecloudstorage.model.User;
-import com.seanroshan.superduperdrivecloudstorage.services.FileService;
-import com.seanroshan.superduperdrivecloudstorage.services.UserService;
+import com.seanroshan.superduperdrivecloudstorage.services.api.FileService;
+import com.seanroshan.superduperdrivecloudstorage.services.api.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.Authentication;
@@ -36,13 +38,13 @@ public class FileUploadController {
         boolean isUploaded = fileService.uploadFile(fileUpload, activeUser.getUserId());
 
         if (isUploaded) {
-            model.addAttribute("status", "SUCCESS");
+            model.addAttribute(ApplicationConstants.STATUS_ATTRIBUTE, ApplicationConstants.SUCCESS_STATUS);
         } else {
-            model.addAttribute("status", "FAILED");
-            model.addAttribute("errorMessage", "File upload failed!");
+            model.addAttribute(ApplicationConstants.STATUS_ATTRIBUTE, ApplicationConstants.FAILURE_STATUS);
+            model.addAttribute(ApplicationConstants.ERROR_MESSAGE_ATTRIBUTE, BusinessError.UPLOAD_FILE_FAILED.getErrorMessage());
         }
 
-        return "result";
+        return ApplicationConstants.RESULT_PAGE_NAME;
     }
 
 }

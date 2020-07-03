@@ -1,8 +1,11 @@
 package com.seanroshan.superduperdrivecloudstorage.controller.file;
 
+import com.seanroshan.superduperdrivecloudstorage.backend.constants.ApplicationConstants;
+import com.seanroshan.superduperdrivecloudstorage.backend.constants.BusinessError;
+import com.seanroshan.superduperdrivecloudstorage.backend.constants.ParameterConstants;
 import com.seanroshan.superduperdrivecloudstorage.model.User;
-import com.seanroshan.superduperdrivecloudstorage.services.FileService;
-import com.seanroshan.superduperdrivecloudstorage.services.UserService;
+import com.seanroshan.superduperdrivecloudstorage.services.api.FileService;
+import com.seanroshan.superduperdrivecloudstorage.services.api.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.Authentication;
@@ -27,23 +30,23 @@ public class FileRemoveController {
     }
 
     @GetMapping()
-    public String handleFileRemoval(@RequestParam("fileId") int fileId, Model model, Authentication authentication) {
+    public String handleFileRemoval(@RequestParam(ParameterConstants.FILE_ID) int fileId, Model model, Authentication authentication) {
         LOGGER.debug(fileId);
 
         try {
             User activeUser = userService.getUser(authentication.getName());
             boolean fileDeleted = fileService.deleteFile(fileId, activeUser.getUserId());
             if (fileDeleted) {
-                model.addAttribute("status", "SUCCESS");
-                return "result";
+                model.addAttribute(ApplicationConstants.STATUS_ATTRIBUTE, ApplicationConstants.SUCCESS_STATUS);
+                return ApplicationConstants.RESULT_PAGE_NAME;
             }
         } catch (Exception e) {
             LOGGER.error(e);
         }
 
-        model.addAttribute("status", "FAILED");
-        model.addAttribute("errorMessage", "Failed to remove the file!");
-        return "result";
+        model.addAttribute(ApplicationConstants.STATUS_ATTRIBUTE, ApplicationConstants.FAILURE_STATUS);
+        model.addAttribute(ApplicationConstants.ERROR_MESSAGE_ATTRIBUTE, BusinessError.DELETE_FILE_FAILED.getErrorMessage());
+        return ApplicationConstants.RESULT_PAGE_NAME;
     }
 
 }
