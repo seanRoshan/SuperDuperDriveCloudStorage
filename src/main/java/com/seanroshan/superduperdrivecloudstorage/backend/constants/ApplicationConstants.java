@@ -8,6 +8,9 @@ public interface ApplicationConstants {
     public static final String ERROR_MESSAGE_ATTRIBUTE = "errorMessage";
     public static final String FILES_ATTRIBUTE = "files";
     public static final String NOTES_ATTRIBUTE = "notes";
+    public static final String CREDENTIALS_ATTRIBUTE = "credentials";
+    public static final String NOTE_TO_EDIT_ATTRIBUTE = "noteToEdit";
+    public static final String CREDENTIAL_TO_EDIT_ATTRIBUTE = "credentialToEdit";
     public static final String SIGN_UP_PAGE_NAME = "signup";
     public static final String HOME_PAGE_NAME = "home";
     public static final String LOGIN_PAGE_NAME = "login";

@@ -160,7 +160,7 @@
 
                 <div class="table-responsive">
                     <table class="table table-striped" th:object="${credentials}" id="credentialTable">
-                        <thead>
+                        <thead th:unless="${credentials == null || credentials.isEmpty()}">
                         <tr>
                             <th style="width: 20%" scope="col"></th>
                             <th style="width: 35%" scope="col">URL</th>
@@ -169,14 +169,25 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
+                        <tr th:each="credential : ${credentials}">
                             <td>
-                                <button type="button" class="btn btn-success">Edit</button>
-                                <a class="btn btn-danger">Delete</a>
+                                <button th:credential-id="${credential.credentialId}"
+                                        th:credential-url="${credential.url}"
+                                        th:credential-username="${credential.userName}"
+                                        th:credential-password="${credential.unEncryptedPassword}"
+                                        type="button" class="btn btn-success credential-edit-button">Edit
+                                </button>
+                                <a th:href="@{/credential-management/delete(credentialId=${credential.credentialId})}"
+                                   class="btn btn-danger">Delete</a>
                             </td>
-                            <th scope="row">Example Credential URL</th>
-                            <td>Example Credential Username</td>
-                            <td>Example Credential Password</td>
+                            <th th:text="${credential.url}"></th>
+                            <td th:text="${credential.userName}"></td>
+                            <td th:text="${credential.password}"></td>
+                        </tr>
+                        <tr th:if="${credentials == null || credentials.isEmpty()}">
+                            <td colspan="2">
+                                YOU DO NOT HAVE ANY CREDENTIAL
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -193,21 +204,27 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="#" method="POST">
-                                    <input type="hidden" name="credentialId" id="credential-id">
+                                <form th:object="${credentialToEdit}" th:action="@{/credential-management}"
+                                      action="#" method="POST">
+                                    <input th:value="*{credentialId}" type="hidden" name="credentialId"
+                                           id="credential-id">
                                     <div class="form-group">
-                                        <label for="note-title" class="col-form-label">URL</label>
-                                        <input type="text" name="url" class="form-control" id="credential-url"
+                                        <label for="credential-url" class="col-form-label">URL</label>
+                                        <input th:field="*{url}"
+                                               type="text" name="url" class="form-control" id="credential-url"
                                                maxlength="100" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="note-title" class="col-form-label">Username</label>
-                                        <input type="text" name="username" class="form-control" id="credential-username"
+                                        <label for="credential-username" class="col-form-label">Username</label>
+                                        <input th:field="*{userName}"
+                                               type="text" name="userName" class="form-control" id="credential-username"
                                                maxlength="30" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="note-title" class="col-form-label">Password</label>
-                                        <input type="text" name="password" class="form-control" id="credential-password"
+                                        <label for="credential-password" class="col-form-label">Password</label>
+                                        <input th:field="*{unEncryptedPassword}"
+                                               type="text" name="unEncryptedPassword" class="form-control"
+                                               id="credential-password"
                                                maxlength="30" required>
                                     </div>
                                     <button id="credentialSubmit" type="submit" class="d-none"></button>
@@ -242,7 +259,20 @@
         $('#note-id').val(noteId ? noteId : 0);
         $('#note-title').val(noteTitle ? noteTitle : '');
         $('#note-description').val(noteDescription ? noteDescription : '');
-        this.showNoteModal();
+        $('#noteModal').modal('show');
+    });
+
+
+    $('.credential-edit-button').on('click', function () {
+        const credentialId = this.getAttribute("credential-id");
+        const url = this.getAttribute("credential-url");
+        const username = this.getAttribute("credential-username");
+        const password = this.getAttribute("credential-password");
+        $('#credential-id').val(credentialId ? credentialId : 0);
+        $('#credential-url').val(url ? url : '');
+        $('#credential-username').val(username ? username : '');
+        $('#credential-password').val(password ? password : '');
+        $('#credentialModal').modal('show');
     });
 
     function showNoteModal() {
@@ -250,13 +280,10 @@
     }
 
     // For opening the credentials modal
-    function showCredentialModal(credentialId, url, username, password) {
-        $('#credential-id').val(credentialId ? credentialId : '');
-        $('#credential-url').val(url ? url : '');
-        $('#credential-username').val(username ? username : '');
-        $('#credential-password').val(password ? password : '');
+    function showCredentialModal() {
         $('#credentialModal').modal('show');
     }
+
 </script>
 </body>
 </html>

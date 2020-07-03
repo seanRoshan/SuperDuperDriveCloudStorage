@@ -11,5 +11,6 @@ public interface ParameterConstants {
     public static final String USER_NAME = "userName";
     public static final String FILE_ID = "fileId";
     public static final String NOTE_ID = "noteId";
+    public static final String CREDENTIAL_ID = "credentialId";
 
 }
