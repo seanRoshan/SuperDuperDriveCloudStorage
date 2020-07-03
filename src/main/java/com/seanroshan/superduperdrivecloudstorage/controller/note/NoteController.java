@@ -37,7 +37,7 @@ public class NoteController {
 
         try {
             User activeUser = userService.getUser(authentication.getName());
-            boolean noteDeleted = noteService.deleteNote(noteId, activeUser.getUserId());
+            boolean noteDeleted = noteService.deleteNote(activeUser.getUserId(), noteId);
             if (noteDeleted) {
                 model.addAttribute(ApplicationConstants.STATUS_ATTRIBUTE, ApplicationConstants.SUCCESS_STATUS);
                 return ApplicationConstants.RESULT_PAGE_NAME;

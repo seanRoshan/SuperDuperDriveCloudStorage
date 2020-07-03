@@ -37,7 +37,7 @@ public class CredentialController {
 
         try {
             User activeUser = userService.getUser(authentication.getName());
-            boolean credentialDeleted = credentialService.deleteCredential(credentialId, activeUser.getUserId());
+            boolean credentialDeleted = credentialService.deleteCredential(activeUser.getUserId(), credentialId);
             if (credentialDeleted) {
                 model.addAttribute(ApplicationConstants.STATUS_ATTRIBUTE, ApplicationConstants.SUCCESS_STATUS);
                 return ApplicationConstants.RESULT_PAGE_NAME;
