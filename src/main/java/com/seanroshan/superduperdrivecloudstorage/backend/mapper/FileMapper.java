@@ -52,6 +52,20 @@ public interface FileMapper {
 
 
     /**
+     * Gets File by fileName
+     *
+     * @param fileName - fileName
+     * @return {@link File}
+     */
+    @Select("SELECT * FROM FILES WHERE "
+            + " FILE_NAME = #{fileName} "
+            + " and USER_ID = #{userId} "
+            + " limit 1")
+    File getFileByFileName(@Param(ParameterConstants.FILE_NAME) String fileName,
+                           @Param(ParameterConstants.USER_ID) int userId);
+
+
+    /**
      * Deletes file by fileId and user Id
      *
      * @param fileId - fileId

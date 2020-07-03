@@ -35,6 +35,22 @@ public class FileUploadController {
 
         User activeUser = userService.getUser(authentication.getName());
 
+        long fileSize = fileUpload.getSize();
+
+        if (fileSize <= 0L) {
+            model.addAttribute(ApplicationConstants.STATUS_ATTRIBUTE, ApplicationConstants.FAILURE_STATUS);
+            model.addAttribute(ApplicationConstants.ERROR_MESSAGE_ATTRIBUTE, BusinessError.NO_FILE.getErrorMessage());
+            return ApplicationConstants.RESULT_PAGE_NAME;
+        }
+
+
+        boolean isFileExists = fileService.checkFileExists(fileUpload.getOriginalFilename(), activeUser.getUserId());
+        if (isFileExists) {
+            model.addAttribute(ApplicationConstants.STATUS_ATTRIBUTE, ApplicationConstants.FAILURE_STATUS);
+            model.addAttribute(ApplicationConstants.ERROR_MESSAGE_ATTRIBUTE, BusinessError.FILED_ALREADY_UPLOADED.getErrorMessage());
+            return ApplicationConstants.RESULT_PAGE_NAME;
+        }
+
         boolean isUploaded = fileService.uploadFile(fileUpload, activeUser.getUserId());
 
         if (isUploaded) {

@@ -66,6 +66,21 @@ public class FileDAO extends TransactionHandlerDAO {
 
 
     /**
+     * Gets File by fileName
+     *
+     * @param fileName - fileName
+     * @param userId   - userId
+     * @return {@link File}
+     */
+    public File getFileByFileName(String fileName, int userId) {
+        LOGGER.traceEntry(fileName, Integer.toString(userId));
+        File file = fileMapper.getFileByFileName(fileName, userId);
+        LOGGER.traceExit(file);
+        return file;
+    }
+
+
+    /**
      * Deletes file by fileId and user Id
      *
      * @param userId - userId

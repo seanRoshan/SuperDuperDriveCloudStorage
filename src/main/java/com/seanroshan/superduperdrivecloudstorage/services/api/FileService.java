@@ -36,6 +36,11 @@ public class FileService {
     }
 
 
+    public boolean checkFileExists(String fileName, int userId) {
+        return fileDAO.getFileByFileName(fileName, userId) != null;
+    }
+
+
     public File downloadFile(int fileId, int userId) {
         return fileDAO.getFile(fileId, userId);
     }
